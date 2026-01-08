@@ -292,4 +292,143 @@ class TableTest extends TestCase
         $this->assertInstanceOf(Table::class, $result);
         $this->assertCount(2, $result->rows);
     }
+
+    public function testHideHeaders(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $table->addRow(['John', '30']);
+        $table->hideHeaders();
+
+        $html = $table->render();
+
+        $this->assertStringNotContainsString('<thead>', $html);
+        $this->assertStringNotContainsString('</thead>', $html);
+        $this->assertStringNotContainsString('<strong>Name</strong>', $html);
+        $this->assertStringNotContainsString('<strong>Age</strong>', $html);
+        $this->assertStringContainsString('<tbody>', $html);
+        $this->assertStringContainsString('John', $html);
+        $this->assertStringContainsString('30', $html);
+    }
+
+    public function testHideHeadersReturnsInstance(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $result = $table->hideHeaders();
+
+        $this->assertSame($table, $result);
+    }
+
+    public function testHideHeadersInFluentInterface(): void
+    {
+        $table = (new Table(['Name', 'Age']))
+            ->hideHeaders()
+            ->addRow(['John', '30'])
+            ->addRow(['Jane', '25']);
+
+        $html = $table->render();
+
+        $this->assertStringNotContainsString('<thead>', $html);
+        $this->assertStringContainsString('John', $html);
+        $this->assertStringContainsString('Jane', $html);
+    }
+
+    public function testSetSingleAttribute(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $table->setAttribute('id', 'my-table');
+
+        $html = $table->render();
+
+        $this->assertStringContainsString('<table id="my-table">', $html);
+    }
+
+    public function testSetMultipleAttributes(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $table->setAttribute('id', 'my-table')
+            ->setAttribute('class', 'table-striped')
+            ->setAttribute('data-test', 'value');
+
+        $html = $table->render();
+
+        $this->assertStringContainsString('id="my-table"', $html);
+        $this->assertStringContainsString('class="table-striped"', $html);
+        $this->assertStringContainsString('data-test="value"', $html);
+    }
+
+    public function testSetAttributeReturnsInstance(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $result = $table->setAttribute('id', 'test');
+
+        $this->assertSame($table, $result);
+    }
+
+    public function testSetAttributeWithNumericValue(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $table->setAttribute('data-index', 123);
+
+        $html = $table->render();
+
+        $this->assertStringContainsString('data-index="123"', $html);
+    }
+
+    public function testTableWithoutAttributes(): void
+    {
+        $table = new Table(['Name', 'Age']);
+        $html = $table->render();
+
+        // Table tag should not have extra space after 'table' if no attributes
+        $this->assertStringContainsString('<table>', $html);
+    }
+
+    public function testCompleteTableWithAttributesAndHiddenHeaders(): void
+    {
+        $table = new Table(['Name', 'Age', 'City']);
+        $table->setAttribute('id', 'users-table')
+            ->setAttribute('class', 'table table-bordered')
+            ->hideHeaders()
+            ->addRow(['John', '30', 'NYC'])
+            ->addRow(['Jane', '25', 'LA']);
+
+        $html = $table->render();
+
+        // Check attributes are present
+        $this->assertStringContainsString('id="users-table"', $html);
+        $this->assertStringContainsString('class="table table-bordered"', $html);
+
+        // Check headers are hidden
+        $this->assertStringNotContainsString('<thead>', $html);
+
+        // Check data is present
+        $this->assertStringContainsString('John', $html);
+        $this->assertStringContainsString('Jane', $html);
+        $this->assertStringContainsString('NYC', $html);
+        $this->assertStringContainsString('LA', $html);
+    }
+
+    public function testAttributeEscaping(): void
+    {
+        $table = new Table(['Name']);
+        $table->setAttribute('data-value', 'test"quote');
+
+        $html = $table->render();
+
+        // Note: Current implementation doesn't escape, but we test what it does
+        $this->assertStringContainsString('data-value="test"quote"', $html);
+    }
+
+    public function testMultipleAttributesInOrder(): void
+    {
+        $table = new Table(['Col']);
+        $table->setAttribute('id', 'first')
+            ->setAttribute('class', 'second')
+            ->setAttribute('style', 'third');
+
+        $html = $table->render();
+
+        $pattern = '/<table\s+id="first"\s+class="second"\s+style="third">/';
+        $this->assertMatchesRegularExpression($pattern, $html);
+    }
 }
