@@ -9,6 +9,7 @@ class Table
 {
   public array $headers = [];
   public array $rows = [];
+  protected bool $showHeader = true;
 
   public function __construct(array $headers, array $rows = [])
   {
@@ -30,19 +31,25 @@ class Table
     return $this->render();
   }
 
+  public function hideHeaders(): self
+  {
+    $this->showHeader = false;
+    return $this;
+  }
+
   public function render(): string
   {
     $html = '';
-    // return $html;
-
     $html .= '<table>' . "\n";
-    $html .= ' <thead>' . "\n";
-    $html .= '  <tr>' . "\n";
-    foreach ($this->headers as $th) {
-      $html .= '   ' . (string)$th . "\n";
+    if ($this->showHeader) {
+      $html .= ' <thead>' . "\n";
+      $html .= '  <tr>' . "\n";
+      foreach ($this->headers as $th) {
+        $html .= '   ' . (string)$th . "\n";
+      }
+      $html .= '  </tr>' . "\n";
+      $html .= ' </thead>' . "\n";
     }
-    $html .= '  </tr>' . "\n";
-    $html .= ' </thead>' . "\n";
     $html .= ' <tbody>' . "\n";
     foreach ($this->rows as $row) {
       $html .= '  <tr>' . "\n";
@@ -59,10 +66,6 @@ class Table
 
   public function addRow(array $row)
   {
-    // if ( count($row) <> count($this->headers) ){
-    // throw new \Exception('Columns '.count($this->headers).' <> '.count($row));
-    // }
-
     $cols = [];
     foreach ($row as $value) {
       if ($value instanceof Td) {
