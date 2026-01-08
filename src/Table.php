@@ -9,6 +9,7 @@ class Table
 {
   public array $headers = [];
   public array $rows = [];
+  protected array $attributes = [];
   protected bool $showHeader = true;
 
   public function __construct(array $headers, array $rows = [])
@@ -37,10 +38,27 @@ class Table
     return $this;
   }
 
+  public function setAttribute(string $key, mixed $value)
+  {
+    $this->attributes[$key] = (string)$value;
+    return $this;
+  }
+
   public function render(): string
   {
     $html = '';
-    $html .= '<table>' . "\n";
+    $html .= '<table';
+
+    if ($this->attributes) {
+      $attrs = [];
+      foreach ($this->attributes as $key => $value) {
+        $attrs[] = $key . '="' . $value . '"';
+      }
+      $html .= ' ' . implode(' ', $attrs);
+    }
+
+    $html .= '>' . "\n";
+
     if ($this->showHeader) {
       $html .= ' <thead>' . "\n";
       $html .= '  <tr>' . "\n";
@@ -50,6 +68,7 @@ class Table
       $html .= '  </tr>' . "\n";
       $html .= ' </thead>' . "\n";
     }
+
     $html .= ' <tbody>' . "\n";
     foreach ($this->rows as $row) {
       $html .= '  <tr>' . "\n";
@@ -59,6 +78,7 @@ class Table
       $html .= '  </tr>' . "\n";
     }
     $html .= ' </tbody>' . "\n";
+
     $html .= '</table>' . "\n";
 
     return $html;
