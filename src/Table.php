@@ -20,7 +20,7 @@ class Table
       }
     }
 
-    foreach ($this->rows as $row) {
+    foreach ($rows as $row) {
       $this->addRow($row);
     }
   }
