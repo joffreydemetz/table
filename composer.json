@@ -4,9 +4,10 @@
     "description": "A simple PHP Table generation library.",
     "keywords": [
         "JDZ",
-        "table"
+        "table",
+        "core"
     ],
-    "homepage": "https://jdz.joffreydemetz.com/table/",
+    "homepage": "https://jdz.joffreydemetz.com/table",
     "license": "MIT",
     "authors": [
         {
@@ -20,7 +21,7 @@
         "php": ">=8.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.0"
+        "phpunit/phpunit": "^11.0"
     },
     "autoload": {
         "psr-4": {
@@ -33,6 +34,6 @@
         }
     },
     "scripts": {
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always --testdox"
     }
 }
