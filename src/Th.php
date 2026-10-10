@@ -6,7 +6,8 @@ use JDZ\Table\Cell;
 
 class Th extends Cell
 {
-  public string $tag = 'td';
+  // a header cell (it rendered <td>)
+  public string $tag = 'th';
 
   public function setValue(string $value)
   {

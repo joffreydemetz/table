@@ -7,10 +7,10 @@ use PHPUnit\Framework\TestCase;
 
 class ThTest extends TestCase
 {
-    public function testConstructorSetsTagToTd(): void
+    public function testTheTagIsTh(): void
     {
         $th = new Th();
-        $this->assertEquals('td', $th->tag);
+        $this->assertEquals('th', $th->tag);
     }
 
     public function testConstructorWithEmptyValue(): void
@@ -84,13 +84,13 @@ class ThTest extends TestCase
     public function testRenderWithoutValue(): void
     {
         $th = new Th();
-        $this->assertEquals('<td></td>', $th->render());
+        $this->assertEquals('<th></th>', $th->render());
     }
 
     public function testRenderWithValue(): void
     {
         $th = new Th('Header');
-        $this->assertEquals('<td><strong>Header</strong></td>', $th->render());
+        $this->assertEquals('<th><strong>Header</strong></th>', $th->render());
     }
 
     public function testRenderWithWidth(): void
@@ -139,7 +139,7 @@ class ThTest extends TestCase
     public function testToString(): void
     {
         $th = new Th('Title');
-        $this->assertEquals('<td><strong>Title</strong></td>', (string)$th);
+        $this->assertEquals('<th><strong>Title</strong></th>', (string)$th);
     }
 
     public function testFluentInterface(): void
