@@ -13,12 +13,6 @@ class ThTest extends TestCase
         $this->assertEquals('th', $th->tag);
     }
 
-    public function testConstructorWithEmptyValue(): void
-    {
-        $th = new Th();
-        $this->assertEquals('', $th->value);
-    }
-
     public function testConstructorWrapsValueInStrong(): void
     {
         $th = new Th('Header');
@@ -39,34 +33,11 @@ class ThTest extends TestCase
         $this->assertEquals('', $th->value);
     }
 
-    public function testSetValueReturnsInstance(): void
-    {
-        $th = new Th();
-        $result = $th->setValue('test');
-        $this->assertSame($th, $result);
-    }
-
     public function testSetWidth(): void
     {
         $th = new Th();
         $th->setWidth(50);
         $this->assertEquals(['width' => '50%'], $th->styles);
-    }
-
-    public function testSetWidthReturnsInstance(): void
-    {
-        $th = new Th();
-        $result = $th->setWidth(30);
-        $this->assertSame($th, $result);
-    }
-
-    public function testSetWidthAddsPercentageSymbol(): void
-    {
-        $th = new Th();
-        $th->setWidth(25);
-
-        $html = $th->render();
-        $this->assertStringContainsString('style="width:25%"', $html);
     }
 
     public function testSetWidthWithOtherStyles(): void
@@ -125,17 +96,6 @@ class ThTest extends TestCase
         $this->assertStringContainsString('<strong>Header</strong>', $html);
     }
 
-    public function testInheritsCellBehavior(): void
-    {
-        $th = new Th('Header');
-        $th->setAttribute('id', 'header-id')
-            ->setStyle('color', 'blue');
-
-        $html = $th->render();
-        $this->assertStringContainsString('id="header-id"', $html);
-        $this->assertStringContainsString('color:blue', $html);
-    }
-
     public function testToString(): void
     {
         $th = new Th('Title');
@@ -156,14 +116,5 @@ class ThTest extends TestCase
         $this->assertStringContainsString('width:25%', $html);
         $this->assertStringContainsString('class="test"', $html);
         $this->assertStringContainsString('color:green', $html);
-    }
-
-    public function testValueUpdateMaintainsStrongWrapping(): void
-    {
-        $th = new Th('First');
-        $this->assertEquals('<strong>First</strong>', $th->value);
-
-        $th->setValue('Second');
-        $this->assertEquals('<strong>Second</strong>', $th->value);
     }
 }

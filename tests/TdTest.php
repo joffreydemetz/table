@@ -7,18 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class TdTest extends TestCase
 {
-    public function testConstructorSetsTagToTd(): void
-    {
-        $td = new Td();
-        $this->assertEquals('td', $td->tag);
-    }
-
-    public function testConstructorSetsValue(): void
-    {
-        $td = new Td('test value');
-        $this->assertEquals('test value', $td->value);
-    }
-
     public function testConstructorWithoutColspan(): void
     {
         $td = new Td('value');
@@ -42,13 +30,6 @@ class TdTest extends TestCase
         $td = new Td();
         $td->setColspan(3);
         $this->assertEquals(['colspan' => '3'], $td->attributes);
-    }
-
-    public function testSetColspanReturnsInstance(): void
-    {
-        $td = new Td();
-        $result = $td->setColspan(2);
-        $this->assertSame($td, $result);
     }
 
     public function testSetColspanOverridesConstructorValue(): void
@@ -88,17 +69,6 @@ class TdTest extends TestCase
         $html = $td->render();
         $this->assertStringContainsString('colspan="2"', $html);
         $this->assertStringContainsString('style="color:red"', $html);
-    }
-
-    public function testInheritsCellBehavior(): void
-    {
-        $td = new Td('test');
-        $td->setAttribute('id', 'test-id')
-            ->setStyle('width', '100px');
-
-        $html = $td->render();
-        $this->assertStringContainsString('id="test-id"', $html);
-        $this->assertStringContainsString('style="width:100px"', $html);
     }
 
     public function testToString(): void

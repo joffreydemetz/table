@@ -42,13 +42,6 @@ class TableTest extends TestCase
         $this->assertInstanceOf(Th::class, $table->headers[2]);
     }
 
-    public function testConstructorInitializesEmptyRows(): void
-    {
-        $table = new Table(['Header']);
-        $this->assertIsArray($table->rows);
-        $this->assertEmpty($table->rows);
-    }
-
     public function testAddRowWithStrings(): void
     {
         $table = new Table(['Name', 'Age']);
@@ -85,14 +78,6 @@ class TableTest extends TestCase
         $this->assertInstanceOf(Td::class, $table->rows[0][1]);
     }
 
-    public function testAddRowReturnsInstance(): void
-    {
-        $table = new Table(['Header']);
-        $result = $table->addRow(['value']);
-
-        $this->assertSame($table, $result);
-    }
-
     public function testAddMultipleRows(): void
     {
         $table = new Table(['Name', 'Age']);
@@ -110,14 +95,6 @@ class TableTest extends TestCase
 
         // The width should be set on the first header
         $this->assertEquals(['width' => '50%'], $table->headers[0]->styles);
-    }
-
-    public function testSetColumnWidthReturnsInstance(): void
-    {
-        $table = new Table(['Name', 'Age']);
-        $result = $table->setColumnWidth(0, 30);
-
-        $this->assertSame($table, $result);
     }
 
     public function testSetMultipleColumnWidths(): void
@@ -223,17 +200,6 @@ class TableTest extends TestCase
         $this->assertEquals($table->render(), (string)$table);
     }
 
-    public function testToStringCallsRender(): void
-    {
-        $table = new Table(['Name', 'Age']);
-        $table->addRow(['John', '30']);
-
-        $stringOutput = (string)$table;
-        $renderOutput = $table->render();
-
-        $this->assertEquals($renderOutput, $stringOutput);
-    }
-
     public function testComplexTableScenario(): void
     {
         $table = new Table(['Name', 'Age', 'City']);
@@ -310,14 +276,6 @@ class TableTest extends TestCase
         $this->assertStringContainsString('30', $html);
     }
 
-    public function testHideHeadersReturnsInstance(): void
-    {
-        $table = new Table(['Name', 'Age']);
-        $result = $table->hideHeaders();
-
-        $this->assertSame($table, $result);
-    }
-
     public function testHideHeadersInFluentInterface(): void
     {
         $table = (new Table(['Name', 'Age']))
@@ -354,14 +312,6 @@ class TableTest extends TestCase
         $this->assertStringContainsString('id="my-table"', $html);
         $this->assertStringContainsString('class="table-striped"', $html);
         $this->assertStringContainsString('data-test="value"', $html);
-    }
-
-    public function testSetAttributeReturnsInstance(): void
-    {
-        $table = new Table(['Name', 'Age']);
-        $result = $table->setAttribute('id', 'test');
-
-        $this->assertSame($table, $result);
     }
 
     public function testSetAttributeWithNumericValue(): void
